@@ -1,0 +1,22 @@
+{
+  "name": "devtinder",
+  "version": "1.0.0",
+  "description": "For building my first backend project",
+  "keywords": [
+    "nodejs",
+    "javascript",
+    "full-stack",
+    "development"
+  ],
+  "license": "ISC",
+  "author": "Sanjai Kumar",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
