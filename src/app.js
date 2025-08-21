@@ -2,19 +2,37 @@ const express = require('express');
 
 const app = express();
 
-app.get("/",(req,res)=>{
-    res.send(
-        "Hello you did it! You have successfully set up your Express server.");
+
+app.get("/user", (req, res) => {
+  res.send({firstName : "sanjai", lastName : "kumar"});
 });
-app.get("/hello",(req, res) => {
-  res.send(
-    "we are on the hello route."
-  );
+
+app.post("/user", (req, res)=>{
+  //DB was stored in the batabase
+  res.send("user data was stored in the database");
+})
+
+app.delete("/user", (req, res)=>{
+  //DB was deleted from the database
+  res.send("user data was deleted from the database");
+})
+
+app.use("/test",(req,res)=>{
+  res.send("its a test page")
 });
-app.get("/test",(req, res) => {
-  res.send(
-    "we are on the test route."
-  );
+ 
+app.put("/user", (req, res)=>{
+  //DB was updated in the database
+  res.send("user data was updated in the database");
+})
+
+app.patch("/user", (req, res)=>{
+  //DB was partially updated in the database
+  res.send("user data was partially updated in the database");
+})
+
+app.use("/user", (req, res) => {
+  res.send("haahaha be carefull when you set api on code");
 });
 
 app.listen(3000, () =>{
