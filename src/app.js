@@ -1,24 +1,37 @@
 const express = require('express');
-
+const connectDB = require('./config/database');
 const app = express();
-const { adminAuth, userAuth } = require("./middlewares/Auth.js");
+const User = require("./models/user");
 
 
-//app.use('/admin', adminAuth );
-
-app.get('/userData', (req, res) => {
-  console.log(" its the login api to post the data");
-  throw new Error('error in the login wroung details')
-  res.send('User logged in successfully');
+app.post("/signup", async (req, res)=>{
+  // creating a new instance of the User modal
+  const user = new User({
+    firstName: "sanjai",
+    lastName: "kumar",
+    emailId: "sanjai@kumargmail.com",
+    password: "sanjai@123"
+  });
+try{
+  await user.save();
+  res.send("User registered successfully");
+}catch(err){
+  res.status(500).send("error in store the user in database")
+}
+  
 });
 
-app.use ('/', (err, req, res, next)=>{
-  if (err){
-    res.status(500).send('somthing went wroung')
-  }
-})
+connectDB()
+  .then(() => {
+    console.log("Database connected successfully");
+
+    app.listen(3000, () => {
+      console.log("Server is running on port 3000");
+    });
+  })
+  .catch((err) => {
+    console.error("Database connection failed:", err);
+  });
 
 
-app.listen(3000, () =>{
-    console.log("Server is running on port 3000");
-})
+
