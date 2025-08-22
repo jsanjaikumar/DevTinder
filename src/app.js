@@ -4,29 +4,19 @@ const app = express();
 const { adminAuth, userAuth } = require("./middlewares/Auth.js");
 
 
-app.use('/admin', adminAuth );
+//app.use('/admin', adminAuth );
 
-app.post('/user/login', (req, res) => {
+app.get('/userData', (req, res) => {
   console.log(" its the login api to post the data");
+  throw new Error('error in the login wroung details')
   res.send('User logged in successfully');
 });
 
-app.get('/user/data', userAuth, (req, res) => {
-  console.log("its a user path the data api");
-  res.send('User route accessed');
-});
-
-app.get("/admin/AllData", (req, res, next) => {
-  console.log("Admin route accessed")
-  res.send('Admin route accessed to the All data base');
-  ;})
-
-app.get("/admin/deleteUser", (req, res, next)=>{
-  console.log("Admin route accessed to delete user")
-  res.send('Admin route accessed to delete user');
+app.use ('/', (err, req, res, next)=>{
+  if (err){
+    res.status(500).send('somthing went wroung')
+  }
 })
-
-
 
 
 app.listen(3000, () =>{
