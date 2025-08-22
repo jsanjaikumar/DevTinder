@@ -2,9 +2,11 @@ const express = require('express');
 
 const app = express();
 
+// app.get("/user", RH1,RH2,RH3, RH4)
+
 app.use(
   "/user",
-  (req, res, next) => {
+  [(req, res, next) => {
     console.log("User middleware executed");
     next();
     //res.send("User route accessed");
@@ -13,7 +15,7 @@ app.use(
     console.error("Error in user route:");
     //res.send("second response to one path 2");
     next();
-  },[
+  }],[
   (req, res, next) => {
     console.error("Error in user route:");
     //res.send("three response to one path 3");
