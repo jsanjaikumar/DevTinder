@@ -1,36 +1,32 @@
 const express = require('express');
 
 const app = express();
+const { adminAuth, userAuth } = require("./middlewares/Auth.js");
 
-// app.get("/user", RH1,RH2,RH3, RH4)
 
-app.use(
-  "/user",
-  [(req, res, next) => {
-    console.log("User middleware executed");
-    next();
-    //res.send("User route accessed");
-  },
-  (req, res, next) => {
-    console.error("Error in user route:");
-    //res.send("second response to one path 2");
-    next();
-  }],[
-  (req, res, next) => {
-    console.error("Error in user route:");
-    //res.send("three response to one path 3");
-    next();
-  },
-  (req, res, next) => {
-    console.error("Error in user route:");
-    //res.send("four response to one path 3");
-    next();
-  }],
-  (req, res, next) => {
-    console.error("Error in user route:");
-    res.send("5th response to one path 5");
-  }
-);
+app.use('/admin', adminAuth );
+
+app.post('/user/login', (req, res) => {
+  console.log(" its the login api to post the data");
+  res.send('User logged in successfully');
+});
+
+app.get('/user/data', userAuth, (req, res) => {
+  console.log("its a user path the data api");
+  res.send('User route accessed');
+});
+
+app.get("/admin/AllData", (req, res, next) => {
+  console.log("Admin route accessed")
+  res.send('Admin route accessed to the All data base');
+  ;})
+
+app.get("/admin/deleteUser", (req, res, next)=>{
+  console.log("Admin route accessed to delete user")
+  res.send('Admin route accessed to delete user');
+})
+
+
 
 
 app.listen(3000, () =>{
