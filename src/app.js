@@ -63,13 +63,34 @@ app.delete('/user',async (req,res)=>{
 })
 
 // update a user API 
-app.patch('/user', async (req, res)=>{
-  const userId = req.body.userId
+app.patch('/user/:userId', async (req, res)=>{
+  const userId = req.params?.userId
   const data = req.body;
+  console.log(data)
   try {
-    const user = await User.findByIdAndUpdate({ _id: userId }, data, { new: true , runValidators: true });
-    console.log(user)
-    res.send("user updated successfully");
+    const AllowedUpdates = [
+      "photoUrl",
+      "skills",
+      "age",
+      "about",
+      "gender",
+    ];
+    const isAllowedUpdates = Object.keys(data).every((k)=>AllowedUpdates.includes(k))
+    if(!isAllowedUpdates){
+      throw new Error("  you are try to update unchangble data")
+    }
+    if (data?.skills.length > 10){
+      throw new Errow("The skills data must be lower than 10 skills")
+    }
+    if (data?.about.length > 201){
+      throw new Error("the about length must below 201")
+    }
+      const user = await User.findByIdAndUpdate({ _id: userId }, data, {
+        new: true,
+        runValidators: true,
+      });
+      console.log(user);
+      res.send("user updated successfully");
     
   } catch (err) {
     res.status(500).send("Update Document failed"  + err.message);

@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema(
     age: {
       type: Number,
       min: 18,
-      trim: true,
+
     },
     gender: {
       type: String,
@@ -56,7 +56,7 @@ const userSchema = new mongoose.Schema(
     },
     skills: {
       type: [String],
-      maxLength: 20
+      maxLength: 10
     },
   },
   {
