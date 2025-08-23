@@ -5,6 +5,21 @@ const User = require("./models/user");
 
 app.use(express.json())
 
+//signUp API 
+app.post("/signup", async (req, res) => {
+  // creating a new instance of the User modal
+  const user = new User(req.body);
+  console.log(user)
+  try {
+    await user.save();
+    res.send("User registered successfully");
+  } catch (err) {
+    res.status(500).send("error in store the user in database");
+  }
+});
+
+
+// get a user by emailId
 app.get("/user", async (req, res)=>{
   const userEmailId = req.body.emailId;
   
@@ -21,7 +36,7 @@ app.get("/user", async (req, res)=>{
       res.status(500).send("Error in fetching user from database")
     }
 })
-
+// get all users - creating a feed API
 app.get("/feed", async (req, res)=>{
   try { 
     const allUsers =  await User.find({});
@@ -31,19 +46,62 @@ app.get("/feed", async (req, res)=>{
   }
 })
 
-app.post("/signup", async (req, res)=>{
-  // creating a new instance of the User modal
+// delete a user by userId
+app.delete('/user',async (req,res)=>{
+  const userId = req.body.userId;
+  try{
+    const deletedUser = await User.findByIdAndDelete(userId)
+    if(!deletedUser){
+      res.status(404).send("User not found")
+    }else{
+        res.send("User deleted successfully")
+      }
+  }catch(err){
+    res.status(500).send("Error in deleting the user")
+  }
 
-  const user = new User(req.body);
-try{
-  await user.save();
-  res.send("User registered successfully");
-}catch(err){
-  res.status(500).send("error in store the user in database")
-}
-  
-});
+})
 
+// update a user API 
+app.patch('/user', async (req, res)=>{
+  const userId = req.body.userId
+  const data = req.body;
+  try {
+    const user = await User.findByIdAndUpdate({ _id: userId }, data, { new: true , runValidators: true });
+    console.log(user)
+    res.send("user updated successfully");
+    
+  } catch (err) {
+    res.status(500).send("Update Document failed"  + err.message);
+  }
+})
+// update user by EmailId
+app.patch('/user/email', async (req, res)=>{
+  const userEmailId = req.body.emailId
+  const data = req.body;
+  try{
+    const users = await User.findOneAndUpdate({ emailId: userEmailId }, data, {
+      new: true,
+      runValidators: true,
+    });
+    res.send("user updated successfully by emailId")
+
+  }catch(err){
+    res.status(500).send("Error in updating the user by emailId")
+  }
+})
+// PUT API to update a user whole data
+app.put('/user', async (req, res)=>{
+  const userId = req.body.userId
+  const data = req.body;
+  try{
+    const user = await User.findByIdAndUpdate({_id: userId}, data, {new: true, overwrite: true});
+    console.log(user)
+    res.send("user updated successfully using put method")
+  }catch(err){
+    res.status(500).send("Error in updating the user using put method")
+  }
+})
 connectDB()
   .then(() => {
     console.log("Database connected successfully");
