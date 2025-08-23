@@ -14,7 +14,7 @@ app.post("/signup", async (req, res) => {
     await user.save();
     res.send("User registered successfully");
   } catch (err) {
-    res.status(500).send("error in store the user in database");
+    res.status(500).send("error in store the user in database" + err.message);
   }
 });
 
@@ -69,6 +69,7 @@ app.patch('/user/:userId', async (req, res)=>{
   console.log(data)
   try {
     const AllowedUpdates = [
+      "emailId",
       "photoUrl",
       "skills",
       "age",
@@ -79,12 +80,14 @@ app.patch('/user/:userId', async (req, res)=>{
     if(!isAllowedUpdates){
       throw new Error("  you are try to update unchangble data")
     }
-    if (data?.skills.length > 10){
-      throw new Errow("The skills data must be lower than 10 skills")
+    if (data.skills && data.skills.length > 10) {
+      throw new Error("The skills data must be lower than 10 skills");
     }
-    if (data?.about.length > 201){
-      throw new Error("the about length must below 201")
+
+    if (data.about && data.about.length > 201) {
+      throw new Error("The about length must be below 201 characters");
     }
+
       const user = await User.findByIdAndUpdate({ _id: userId }, data, {
         new: true,
         runValidators: true,
