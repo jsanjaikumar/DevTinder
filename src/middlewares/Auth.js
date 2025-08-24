@@ -1,28 +1,28 @@
+const  jwt = require("jsonwebtoken")
+const User = require("../models/user")
 
-const adminAuth = (req,res,next)=>{
-  console.log('the admin middleware is under the auth')
-  const token = "code-p"
-  const isAdminAuthenticated = token === "code-p"
-  if(!isAdminAuthenticated){
-    return res.status(401).send('You are not authorized to access this route')
-  }
-  else{
-    next();
-  }
-}
+const userAuth = async (req, res, next) => {
+  try {
+    const cookies = req.cookies;
+    const { token } = cookies;
+    if (!token) {
+      throw new Error("Invalid Token");
+    }
+    const decodeData = await jwt.verify(token, "Dev@Tinder");
+    const { _id } = decodeData;
 
-const userAuth = (req, res, next) => {
-  console.log("the admin middleware is under the auth");
-  const token = "code-p";
-  const isAdminAuthenticated = token === "code-p";
-  if (!isAdminAuthenticated) {
-    return res.status(401).send("You are not authorized to access this route");
-  } else {
-    next();
+    const user = await User.findById(_id);
+    if (!user) {
+      throw new Error("user not found");
+    }
+    req.user = user
+    next()
+  } catch (err) {
+    res.status(400).send("Error at Auth " + err.message);
   }
+
 };
 
 module.exports = {
-  adminAuth,
   userAuth,
 };

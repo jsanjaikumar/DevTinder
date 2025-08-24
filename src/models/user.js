@@ -1,6 +1,7 @@
-const { kMaxLength } = require('buffer');
 const mongoose = require('mongoose');
 const validator = require("validator")
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt")
 
 
 const userSchema = new mongoose.Schema(
@@ -44,8 +45,6 @@ const userSchema = new mongoose.Schema(
     },
     gender: {
       type: String,
-      required: true,
-      trim: true,
       validate(value) {
         if (!["male", "female", "others"].includes(value)) {
           throw new Error("gender is Not valid");
@@ -71,12 +70,31 @@ const userSchema = new mongoose.Schema(
     },
     skills: {
       type: [String],
-      maxLength: 10,
+      maxLength: 10
     },
   },
   {
     timestamps: true,
   }
 );
+
+userSchema.methods.getJWT = async function () {
+  const user = this
+
+  const token = await jwt.sign({ _id: user._id }, "Dev@Tinder", {expiresIn :"7d" }
+  );
+  
+  return token;
+};
+
+userSchema.methods.validPassword = async function (passwordInputByUser) {
+  const user = this
+  passwordHash = user.password;
+
+
+  const isPasswordValid = await  bcrypt.compare(passwordInputByUser, passwordHash)
+
+  return isPasswordValid;
+}
 
 module.exports = mongoose.model("User", userSchema);
