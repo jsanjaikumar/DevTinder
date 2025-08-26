@@ -86,6 +86,8 @@ userSchema.methods.getJWT = async function () {
   
   return token;
 };
+// to find User.firstName : sanjai, User.lastName: kumar this compand index is below to make search faast when we have lot of datas
+userSchema.index({firstName: 1, lastName: 1})
 
 userSchema.methods.validPassword = async function (passwordInputByUser) {
   const user = this

@@ -14,6 +14,43 @@ const signupDataValidate = (req)=>{
     }
 }
 
+const vaildateEditProfileData = (req)=> {
+     
+    const AllowedEditFields = [
+      "firstName",
+      "lastName",
+      "about",
+      "skills",
+      "age",
+      "gender",
+      "photoUrl",
+      "emailId",
+    ]
+
+   const isEditAllowed = Object.keys(req.body).every(field => 
+    AllowedEditFields.includes(field)
+);
+
+   return isEditAllowed;
+}
+//password faild vaildate
+const vaildateEditPassword = (req)=>{
+    const onlyPassword = ["password"]
+
+    const isOnlyPassword = Object.keys(req.body).every(field => onlyPassword.includes(field)
+);
+    return isOnlyPassword;
+}
+
+//reuquest interest/ignore api validator
+const connectionRequestValidator = (req)=>{
+    const AllowedStatus = ["interested", "ignored"];
+    
+    const isAllowedStatus = Object.keys(req.body)
+}
+
 module.exports={
-    signupDataValidate
+    signupDataValidate,
+    vaildateEditProfileData,
+    vaildateEditPassword
 }
