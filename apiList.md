@@ -1,23 +1,20 @@
 # DEvTinder api list
 
-//AuthRouter
+# AuthRouter
 POST / signup
 POST / login
 POST /logout
 
-//profileRouter
+# profileRouter
 GET/profile/view
 PATCH/profile/edit
 PATCH/profile/password
 
-//CONNECTIONSRouter
-POST/request/send/interested/:userId
-POST/request/send/ignored/:userId
+# CONNECTIONSRouter
+POST/request/send/:status/:userId
+POST/request/review/:status/:requestId
 
-POST/request/review/accepted/:requestId
-POST/request/review/rejected/:requestId
-
-/USERRouter
+# USERRouter
 GET/user/connections
 GET/user/request/received
 GET/user/feed - gets the all user from the app
