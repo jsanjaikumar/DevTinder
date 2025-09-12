@@ -4,6 +4,8 @@ const { userAuth } = require("../middlewares/Auth");
 const connectionRequestModel = require("../models/connectionRequest")
 const User = require("../models/user");
 
+const sendEmail = require("../utils/sendEmail");
+
 //sendConnectionAPI
 requestRouter.post(
   "/request/send/:status/:userId",
@@ -35,7 +37,7 @@ requestRouter.post(
       if (connectionRequestExisting) {
         return res
           .status(400)
-          .json({ message: "connection request is sAlready exists" });
+          .json({ message: "connection request is Already exists" });
       }
 
       const connectionRequest = await connectionRequestModel({
@@ -45,6 +47,14 @@ requestRouter.post(
       });
 
       const data = await connectionRequest.save();
+
+      const emailRes = await sendEmail.run(
+        "A new friend request from " + req.user.firstName,
+        req.user.firstName + " is " + status + " in " + toUser.firstName
+      );
+
+      console.log(emailRes)
+
       res.json({
         message:
           req.user.firstName + " is " + status + " in " + toUser.firstName,
