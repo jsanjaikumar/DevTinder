@@ -95,6 +95,22 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
   }
 });
 
+ //verfiy the user is premium or not
+
+ paymentRouter.get("/payment/verify", userAuth, async (req, res)=>{
+  try {
+    const user = req.user.toJSON();
+    if (user.isPremium) {
+      return res.json({ ...user });
+    } else{
+      return res.json({ ...user });
+    }
+  } catch (err) {
+    console.log("Error at payment/verify ", err);
+    res.status(400).send("Error at payment/verify " + err.message);
+  }
+});
+
 // paymentRouter.post("/payment/webhook", async (req, res) => {
 //   try {
 //     const webhookBody = req.body;
