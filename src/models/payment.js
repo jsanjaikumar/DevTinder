@@ -11,9 +11,9 @@ const paymentSchema = new mongoose.Schema(
       type: String,
     },
     orderId: {
-      type: String,
-      required: true,
-    },
+       type: String,
+       required: true,
+       }, // Razorpay order id,
     status: {
       type: String,
       required: true,
