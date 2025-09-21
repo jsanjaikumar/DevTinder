@@ -33,6 +33,7 @@ const vaildateEditProfileData = (req)=> {
 
    return isEditAllowed;
 }
+
 //password faild vaildate
 const vaildateEditPassword = (req)=>{
     const onlyPassword = ["password"]

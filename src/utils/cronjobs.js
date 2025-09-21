@@ -5,8 +5,11 @@ const connectionRequestModel = require("../models/connectionRequest");
 
 
 cron.schedule("0 8 * * *", async () => {
+
+  
   // This will run every day at 8 AM for the users who got the request the previous day
   try {
+    
     const yesterday = subDays(new Date(), 1);
 
     const yesterdayStart = startOfDay(yesterday);

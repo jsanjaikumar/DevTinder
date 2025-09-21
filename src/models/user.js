@@ -39,6 +39,19 @@ const userSchema = new mongoose.Schema(
         }
       },
     },
+    passwordChangedAt: {
+    type: Date,
+    default: null,
+    },
+    verifyOtp: {
+      type: String,
+      default: " ",
+    },
+    verifyOtpExpiryAt: {
+      type: Number,
+      default: 0,
+    },
+    isEmailVerified: { type: Boolean, default: false },
     age: {
       type: Number,
       min: 18,
@@ -53,7 +66,7 @@ const userSchema = new mongoose.Schema(
     },
     isPremium: {
       type: Boolean,
-      default: false
+      default: false,
     },
     membershipType: {
       type: String,
@@ -77,7 +90,7 @@ const userSchema = new mongoose.Schema(
     },
     skills: {
       type: [String],
-      maxLength: 10
+      maxLength: 10,
     },
   },
   {
